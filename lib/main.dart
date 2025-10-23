@@ -39,19 +39,35 @@ class OrderScreen extends StatefulWidget {
   }
 }
 
+// ...existing code...
 class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
+  final List<String> _notes = [];
+  final TextEditingController _noteController = TextEditingController();
 
   void _increaseQuantity() {
     if (_quantity < widget.maxQuantity) {
-      setState(() => _quantity++);
+      setState(() {
+        _quantity++;
+        _notes.add(_noteController.text);
+        _noteController.clear();
+      });
     }
   }
 
   void _decreaseQuantity() {
     if (_quantity > 0) {
-      setState(() => _quantity--);
+      setState(() {
+        _quantity--;
+        _notes.removeLast();
+      });
     }
+  }
+
+  @override
+  void dispose() {
+    _noteController.dispose();
+    super.dispose();
   }
 
   @override
@@ -63,6 +79,38 @@ class _OrderScreenState extends State<OrderScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             OrderItemDisplay(_quantity, 'Footlong'),
+            if (_notes.isNotEmpty)
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _notes.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0,
+                        vertical: 4.0,
+                      ),
+                      child: Text(
+                        'Sandwich ${index + 1}: ${_notes[index].isEmpty ? "(no note)" : _notes[index]}',
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 8.0,
+              ),
+              child: TextField(
+                controller: _noteController,
+                decoration: const InputDecoration(
+                  labelText: 'Add a note (e.g., "no onions", "extra pickles")',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
