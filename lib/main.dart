@@ -85,11 +85,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   shrinkWrap: true,
                   itemCount: _notes.length,
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24.0,
-                        vertical: 4.0,
-                      ),
+                    return Center(
                       child: Text(
                         'Sandwich ${index + 1}: ${_notes[index].isEmpty ? "(no note)" : _notes[index]}',
                         style: const TextStyle(fontSize: 14),
@@ -116,11 +112,21 @@ class _OrderScreenState extends State<OrderScreen> {
               children: [
                 ElevatedButton(
                   onPressed: _increaseQuantity,
-                  child: const Text('Add'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    surfaceTintColor: Colors.redAccent,
+                  ),
+                  child: const Text('+ Add'),
                 ),
                 ElevatedButton(
                   onPressed: _decreaseQuantity,
-                  child: const Text('Remove'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    surfaceTintColor: Colors.redAccent,
+                  ),
+                  child: const Text('- Remove'),
                 ),
               ],
             ),
