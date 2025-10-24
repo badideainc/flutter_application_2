@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+enum BreadType { Wheat, White, Multigrain }
+
 void main() {
   runApp(const App());
 }
@@ -20,13 +22,19 @@ class OrderItemDisplay extends StatelessWidget {
   //final int quantity;
   final String itemType;
   final String notes;
+  final BreadType breadType;
 
-  const OrderItemDisplay(this.notes, this.itemType, {super.key});
+  const OrderItemDisplay(
+    this.notes,
+    this.itemType,
+    this.breadType, {
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      '$itemType sandwich: ${'🥪'} \nNotes: ${notes.isEmpty ? "(no note)" : notes}',
+      '${breadType.name} $itemType sandwich: ${'🥪'} \nNotes: ${notes.isEmpty ? "(no note)" : notes}',
     );
   }
 }
@@ -47,10 +55,13 @@ class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
   final List<String> _notes = [];
   final List<String> _sizes = [];
+  final List<BreadType> _breadTypes = [];
   final TextEditingController _noteController = TextEditingController();
 
   final List<String> _availableSizes = ['Footlong', '6-inch'];
   String _selectedSize = 'Footlong';
+
+  BreadType _selectedBread = BreadType.Wheat;
 
   void _increaseQuantity() {
     if (_quantity < widget.maxQuantity) {
@@ -58,6 +69,7 @@ class _OrderScreenState extends State<OrderScreen> {
         _quantity++;
         _notes.add(_noteController.text);
         _sizes.add(_selectedSize);
+        _breadTypes.add(_selectedBread);
         _noteController.clear();
       });
     }
@@ -67,8 +79,9 @@ class _OrderScreenState extends State<OrderScreen> {
     if (_quantity > 0) {
       setState(() {
         _quantity--;
-        _sizes.removeLast();
         _notes.removeLast();
+        _sizes.removeLast();
+        _breadTypes.removeLast();
       });
     }
   }
@@ -95,7 +108,11 @@ class _OrderScreenState extends State<OrderScreen> {
                   itemCount: _notes.length,
                   itemBuilder: (context, index) {
                     return Center(
-                      child: OrderItemDisplay(_notes[index], _sizes[index]),
+                      child: OrderItemDisplay(
+                        _notes[index],
+                        _sizes[index],
+                        _breadTypes[index],
+                      ),
                     );
                   },
                 ),
@@ -121,6 +138,20 @@ class _OrderScreenState extends State<OrderScreen> {
               onChanged: (String? newValue) {
                 setState(() {
                   _selectedSize = newValue!;
+                });
+              },
+            ),
+            SegmentedButton<BreadType>(
+              segments: BreadType.values
+                  .map(
+                    (b) =>
+                        ButtonSegment<BreadType>(value: b, label: Text(b.name)),
+                  )
+                  .toList(),
+              selected: <BreadType>{_selectedBread},
+              onSelectionChanged: (Set<BreadType> newSelection) {
+                setState(() {
+                  _selectedBread = newSelection.first;
                 });
               },
             ),
