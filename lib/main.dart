@@ -45,6 +45,9 @@ class _OrderScreenState extends State<OrderScreen> {
   final List<String> _notes = [];
   final TextEditingController _noteController = TextEditingController();
 
+  final List<String> _availableSizes = ['Footlong', '6-inch'];
+  String _sandwichSize = 'Footlong';
+
   void _increaseQuantity() {
     if (_quantity < widget.maxQuantity) {
       setState(() {
@@ -78,7 +81,7 @@ class _OrderScreenState extends State<OrderScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            OrderItemDisplay(_quantity, 'Footlong'),
+            OrderItemDisplay(_quantity, _sandwichSize),
             if (_notes.isNotEmpty)
               Expanded(
                 child: ListView.builder(
@@ -106,6 +109,15 @@ class _OrderScreenState extends State<OrderScreen> {
                   border: OutlineInputBorder(),
                 ),
               ),
+            ),
+            DropdownButton<String>(
+              hint: const Text('Select Size'),
+              items: _availableSizes.map((String size) {
+                return DropdownMenuItem<String>(value: size, child: Text(size));
+              }).toList(),
+              onChanged: (String? newValue) {
+                _sandwichSize = newValue!;
+              },
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
