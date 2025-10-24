@@ -17,14 +17,17 @@ class App extends StatelessWidget {
 }
 
 class OrderItemDisplay extends StatelessWidget {
-  final int quantity;
+  //final int quantity;
   final String itemType;
+  final String notes;
 
-  const OrderItemDisplay(this.quantity, this.itemType, {super.key});
+  const OrderItemDisplay(this.notes, this.itemType, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Text('$quantity $itemType sandwich(es): ${'🥪' * quantity}');
+    return Text(
+      '$itemType sandwich: ${'🥪'} \nNotes: ${notes.isEmpty ? "(no note)" : notes}',
+    );
   }
 }
 
@@ -43,16 +46,18 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   int _quantity = 0;
   final List<String> _notes = [];
+  final List<String> _sizes = [];
   final TextEditingController _noteController = TextEditingController();
 
   final List<String> _availableSizes = ['Footlong', '6-inch'];
-  String _sandwichSize = 'Footlong';
+  String _selectedSize = 'Footlong';
 
   void _increaseQuantity() {
     if (_quantity < widget.maxQuantity) {
       setState(() {
         _quantity++;
         _notes.add(_noteController.text);
+        _sizes.add(_selectedSize);
         _noteController.clear();
       });
     }
@@ -62,6 +67,7 @@ class _OrderScreenState extends State<OrderScreen> {
     if (_quantity > 0) {
       setState(() {
         _quantity--;
+        _sizes.removeLast();
         _notes.removeLast();
       });
     }
@@ -70,6 +76,7 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   void dispose() {
     _noteController.dispose();
+    _sizes.removeLast();
     super.dispose();
   }
 
@@ -81,7 +88,6 @@ class _OrderScreenState extends State<OrderScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            OrderItemDisplay(_quantity, _sandwichSize),
             if (_notes.isNotEmpty)
               Expanded(
                 child: ListView.builder(
@@ -89,10 +95,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   itemCount: _notes.length,
                   itemBuilder: (context, index) {
                     return Center(
-                      child: Text(
-                        'Sandwich ${index + 1}: ${_notes[index].isEmpty ? "(no note)" : _notes[index]}',
-                        style: const TextStyle(fontSize: 14),
-                      ),
+                      child: OrderItemDisplay(_notes[index], _sizes[index]),
                     );
                   },
                 ),
@@ -111,12 +114,14 @@ class _OrderScreenState extends State<OrderScreen> {
               ),
             ),
             DropdownButton<String>(
-              hint: const Text('Select Size'),
+              value: _selectedSize,
               items: _availableSizes.map((String size) {
                 return DropdownMenuItem<String>(value: size, child: Text(size));
               }).toList(),
               onChanged: (String? newValue) {
-                _sandwichSize = newValue!;
+                setState(() {
+                  _selectedSize = newValue!;
+                });
               },
             ),
             Row(
