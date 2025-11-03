@@ -34,9 +34,6 @@ flutter run -d <id>  # run on specific device
 Run tests:
 flutter test
 
-Add screenshots to docs/screenshots/ and reference them here:
-![Home Screen](docs/screenshots/home.png)
-
 ## Project structure & tech
 - lib/ — app code
   - main.dart — entry & routes
