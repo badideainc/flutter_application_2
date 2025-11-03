@@ -35,6 +35,8 @@ class _OrderScreenState extends State<OrderScreen> {
   late final OrderRepository _orderRepository;
   final TextEditingController _notesController = TextEditingController();
   bool _isFootlong = true;
+  bool _isToasted = true;
+
   BreadType _selectedBreadType = BreadType.white;
 
   @override
@@ -95,6 +97,8 @@ class _OrderScreenState extends State<OrderScreen> {
       sandwichType = 'six-inch';
     }
 
+    String toastedText = _isToasted ? 'toasted' : 'untoasted';
+
     String noteForDisplay;
     if (_notesController.text.isEmpty) {
       noteForDisplay = 'No notes added.';
@@ -113,6 +117,7 @@ class _OrderScreenState extends State<OrderScreen> {
               itemType: sandwichType,
               breadType: _selectedBreadType,
               orderNote: noteForDisplay,
+              toasted: toastedText,
             ),
             const SizedBox(height: 20),
             Row(
@@ -123,6 +128,20 @@ class _OrderScreenState extends State<OrderScreen> {
                 const Text('footlong', style: normalText),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('untoasted', style: normalText),
+                Switch(
+                  value: _isToasted,
+                  onChanged: (value) {
+                    setState(() => _isToasted = value);
+                  },
+                ),
+                const Text('toasted', style: normalText),
+              ],
+            ),
+
             const SizedBox(height: 10),
             DropdownMenu<BreadType>(
               textStyle: normalText,
@@ -202,6 +221,7 @@ class OrderItemDisplay extends StatelessWidget {
   final String itemType;
   final BreadType breadType;
   final String orderNote;
+  final String toasted;
 
   const OrderItemDisplay({
     super.key,
@@ -209,12 +229,13 @@ class OrderItemDisplay extends StatelessWidget {
     required this.itemType,
     required this.breadType,
     required this.orderNote,
+    required this.toasted,
   });
 
   @override
   Widget build(BuildContext context) {
     String displayText =
-        '$quantity ${breadType.name} $itemType sandwich(es): ${'🥪' * quantity}';
+        '$quantity $toasted ${breadType.name} $itemType sandwich(es): ${'🥪' * quantity}';
 
     return Column(
       children: [
