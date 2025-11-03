@@ -16,18 +16,6 @@ class App extends StatelessWidget {
   }
 }
 
-class OrderItemDisplay extends StatelessWidget {
-  final int quantity;
-  final String itemType;
-
-  const OrderItemDisplay(this.quantity, this.itemType, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text('$quantity $itemType sandwich(es): ${'🥪' * quantity}');
-  }
-}
-
 class OrderScreen extends StatefulWidget {
   final int maxQuantity;
 
@@ -67,15 +55,11 @@ class _OrderScreenState extends State<OrderScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {
-                    print('Add button pressed!');
-                  },
+                  onPressed: _increaseQuantity,
                   child: const Text('Add'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    print('Remove button pressed!');
-                  },
+                  onPressed: _decreaseQuantity,
                   child: const Text('Remove'),
                 ),
               ],
@@ -84,5 +68,17 @@ class _OrderScreenState extends State<OrderScreen> {
         ),
       ),
     );
+  }
+}
+
+class OrderItemDisplay extends StatelessWidget {
+  final int quantity;
+  final String itemType;
+
+  const OrderItemDisplay(this.quantity, this.itemType, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('$quantity $itemType sandwich(es): ${'🥪' * quantity}');
   }
 }
