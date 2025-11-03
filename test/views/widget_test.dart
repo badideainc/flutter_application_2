@@ -11,6 +11,12 @@ void main() {
   });
 
   group('OrderScreen - Quantity', () {
+    testWidgets('Switches between sandwich types', (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+      await tester.tap(find.byType(Switch));
+      expect(find.text('six-inch'), findsOneWidget);
+    });
+
     testWidgets('shows initial quantity and title', (
       WidgetTester tester,
     ) async {
