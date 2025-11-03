@@ -50,9 +50,8 @@ Tech: Flutter, Dart. Optional packages: provider/riverpod, http/dio.
 ## Known limitations & contributions
 - Currently uses local/mock order storage — no backend or payments.
 - Missing features: auth, real payments, push notifications, CI.
-Contributions: fork, create branch feature/xxx, open PR.
+Contributions: badideainc
 
 ## Contact
 Maintainer: badideainc — https://github.com/badideainc
-(Include email or additional links as desired.)
 ```
