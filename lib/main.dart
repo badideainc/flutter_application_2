@@ -124,7 +124,11 @@ class _OrderScreenState extends State<OrderScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text('six-inch', style: normalText),
-                Switch(value: _isFootlong, onChanged: _onSandwichTypeChanged),
+                Switch(
+                  key: const Key('sandwich_type_switch'),
+                  value: _isFootlong,
+                  onChanged: _onSandwichTypeChanged,
+                ),
                 const Text('footlong', style: normalText),
               ],
             ),
