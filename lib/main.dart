@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/repositories/price_repository.dart';
 import 'views/app_styles.dart';
 import 'repositories/order_repository.dart';
 
@@ -33,6 +34,8 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   late final OrderRepository _orderRepository;
+  late final PriceRepository _priceRepository;
+
   final TextEditingController _notesController = TextEditingController();
   bool _isFootlong = true;
   bool _isToasted = true;
@@ -43,6 +46,7 @@ class _OrderScreenState extends State<OrderScreen> {
   void initState() {
     super.initState();
     _orderRepository = OrderRepository(maxQuantity: widget.maxQuantity);
+    _priceRepository = PriceRepository();
     _notesController.addListener(() {
       setState(() {});
     });
@@ -56,14 +60,26 @@ class _OrderScreenState extends State<OrderScreen> {
 
   VoidCallback? _getIncreaseCallback() {
     if (_orderRepository.canIncrement) {
-      return () => setState(_orderRepository.increment);
+      return () => setState(() {
+        _orderRepository.increment();
+        _priceRepository.totalCost(
+          _orderRepository.quantity,
+          _isFootlong ? 'footlong' : 'six-inch',
+        );
+      });
     }
     return null;
   }
 
   VoidCallback? _getDecreaseCallback() {
     if (_orderRepository.canDecrement) {
-      return () => setState(_orderRepository.decrement);
+      return () => setState(() {
+        _orderRepository.decrement();
+        _priceRepository.totalCost(
+          _orderRepository.quantity,
+          _isFootlong ? 'footlong' : 'six-inch',
+        );
+      });
     }
     return null;
   }
@@ -120,6 +136,10 @@ class _OrderScreenState extends State<OrderScreen> {
               toasted: toastedText,
             ),
             const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Text('Total Cost: £${_priceRepository.totalPrice}')],
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
