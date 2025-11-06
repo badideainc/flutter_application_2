@@ -1,8 +1,7 @@
 class PriceRepository {
-  final int quantity;
-  final String size;
+  int totalPrice = 0;
 
-  PriceRepository({required this.quantity, required this.size});
-
-  int TotalCost() => quantity * (size == 'footlong' ? 11 : 7);
+  void totalCost(int newQuantity, String size) {
+    totalPrice = newQuantity * (size == 'footlong' ? 11 : 7);
+  }
 }
