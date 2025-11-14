@@ -16,6 +16,13 @@ void main() {
       await tester.tap(find.byKey(const Key('sandwich_type_switch')));
       expect(find.text('six-inch'), findsOneWidget);
     });
+    testWidgets('Switches between toasted and untoasted', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(const App());
+      await tester.tap(find.byKey(const Key('toast_type_switch')));
+      expect(find.text('toasted'), findsOneWidget);
+    });
 
     testWidgets('shows initial quantity and title', (
       WidgetTester tester,
