@@ -20,9 +20,11 @@ cd flutter_application_2
 flutter pub get
 
 Run:
+```bash
 flutter run
 flutter devices      # list devices
 flutter run -d <id>  # run on specific device
+```
 
 ## Usage (brief)
 - Launch app → Home/Menu screen.
