@@ -157,6 +157,7 @@ class _OrderScreenState extends State<OrderScreen> {
               children: [
                 const Text('untoasted', style: normalText),
                 Switch(
+                  key: const Key('toast_type_switch'),
                   value: _isToasted,
                   onChanged: (value) {
                     setState(() => _isToasted = value);
