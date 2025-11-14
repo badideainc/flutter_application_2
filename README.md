@@ -1,4 +1,3 @@
-```markdown
 # Sandwich Shop — Flutter Application 2
 
 A simple cross-platform Flutter app for a sandwich shop: browse menu, customize sandwiches, place orders, and view order history. Built as a starter template you can extend with real backend, payments, and push notifications.
@@ -51,4 +50,3 @@ Contributions: badideainc
 
 ## Contact
 Maintainer: badideainc — https://github.com/badideainc
-```
